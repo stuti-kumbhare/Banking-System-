@@ -1,0 +1,1505 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking Management System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #172033;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: #172554;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .nav-right {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* CONTAINER */
+        .container {
+            width: 88%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, #172554, #2563eb);
+            color: white;
+            padding: 35px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hero small {
+            letter-spacing: 2px;
+            opacity: 0.8;
+        }
+
+        .hero h1 {
+            margin: 10px 0;
+            font-size: 35px;
+        }
+
+        .hero p {
+            opacity: 0.9;
+        }
+
+        .hero-icon {
+            font-size: 70px;
+        }
+
+        /* STATS */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.06);
+        }
+
+        .stat p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .stat h2 {
+            margin-top: 8px;
+            font-size: 26px;
+        }
+
+        /* ACTIONS */
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .action {
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            text-align: left;
+            transition: 0.2s;
+        }
+
+        .action:hover {
+            border-color: #2563eb;
+            transform: translateY(-3px);
+        }
+
+        .action .icon {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .action h3 {
+            margin-bottom: 5px;
+        }
+
+        .action p {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* CUSTOMERS */
+        .customers-section {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.05);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header p {
+            color: #64748b;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        #search {
+            padding: 12px 15px;
+            width: 240px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            outline: none;
+        }
+
+        #search:focus {
+            border-color: #2563eb;
+        }
+
+        .customer {
+            border: 1px solid #e2e8f0;
+            border-radius: 13px;
+            padding: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .customer-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #dbeafe;
+            color: #2563eb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .customer-info h3 {
+            margin-bottom: 5px;
+        }
+
+        .customer-info p {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .customer-right {
+            text-align: right;
+        }
+
+        .customer-right strong {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .view-btn {
+            background: #eff6ff;
+            color: #2563eb;
+            border: none;
+            padding: 8px 13px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .view-btn:hover {
+            background: #dbeafe;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 45px 20px;
+            color: #64748b;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.65);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            border-radius: 18px;
+            position: relative;
+        }
+
+        .modal-box h2 {
+            margin-bottom: 6px;
+        }
+
+        .modal-subtitle {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            position: absolute;
+            right: 18px;
+            top: 12px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        label {
+            display: block;
+            margin: 14px 0 6px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+        }
+
+        .submit-btn {
+            width: 100%;
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 13px;
+            border-radius: 9px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .submit-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* DETAILS */
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 13px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .detail-item span {
+            color: #64748b;
+        }
+
+        .detail-balance {
+            font-size: 30px;
+            font-weight: bold;
+            margin: 22px 0;
+            color: #172033;
+        }
+
+        .history-title {
+            margin: 20px 0 12px;
+        }
+
+        .transaction {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .transaction small {
+            color: #64748b;
+        }
+
+        .deposit {
+            color: #16a34a;
+        }
+
+        .withdraw {
+            color: #dc2626;
+        }
+
+        .transfer {
+            color: #2563eb;
+        }
+
+        /* MESSAGE */
+        #message {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            background: #172033;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 10px;
+            display: none;
+            z-index: 2000;
+        }
+
+        #message.show {
+            display: block;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 16px 5%;
+            }
+
+            .nav-right {
+                display: none;
+            }
+
+            .container {
+                width: 92%;
+            }
+
+            .hero h1 {
+                font-size: 27px;
+            }
+
+            .hero-icon {
+                font-size: 45px;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                display: block;
+            }
+
+            #search {
+                width: 100%;
+                margin-top: 15px;
+            }
+
+            .customer {
+                align-items: flex-start;
+            }
+
+            .customer-right {
+                margin-left: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">🏦 MyBank</div>
+        <div class="nav-right">Banking Management System</div>
+    </nav>
+
+
+    <div class="container">
+
+        <!-- HERO -->
+        <section class="hero">
+            <div>
+                <small>DIGITAL BANKING</small>
+                <h1>Banking Dashboard</h1>
+                <p>Manage customers, accounts and transactions.</p>
+            </div>
+
+            <div class="hero-icon">💳</div>
+        </section>
+
+
+        <!-- STATISTICS -->
+        <section class="stats">
+
+            <div class="stat">
+                <p>Total Customers</p>
+                <h2 id="totalCustomers">0</h2>
+            </div>
+
+            <div class="stat">
+                <p>Total Balance</p>
+                <h2 id="totalBalance">₹0.00</h2>
+            </div>
+
+            <div class="stat">
+                <p>Total Transactions</p>
+                <h2 id="totalTransactions">0</h2>
+            </div>
+
+        </section>
+
+
+        <!-- ACTIONS -->
+        <section class="actions">
+
+            <button class="action" onclick="openModal('createModal')">
+                <div class="icon">👤</div>
+                <h3>Create Customer</h3>
+                <p>Create a new bank account</p>
+            </button>
+
+            <button class="action" onclick="openModal('depositModal')">
+                <div class="icon">💰</div>
+                <h3>Deposit</h3>
+                <p>Add money to an account</p>
+            </button>
+
+            <button class="action" onclick="openModal('withdrawModal')">
+                <div class="icon">💸</div>
+                <h3>Withdraw</h3>
+                <p>Withdraw money</p>
+            </button>
+
+            <button class="action" onclick="openModal('transferModal')">
+                <div class="icon">🔄</div>
+                <h3>Transfer</h3>
+                <p>Transfer money between accounts</p>
+            </button>
+
+        </section>
+
+
+        <!-- CUSTOMERS -->
+        <section class="customers-section">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Customers</h2>
+                    <p>All registered bank customers</p>
+                </div>
+
+                <input
+                    type="text"
+                    id="search"
+                    placeholder="🔍 Search customer..."
+                    oninput="displayCustomers()"
+                >
+
+            </div>
+
+            <div id="customerList"></div>
+
+        </section>
+
+    </div>
+
+
+    <!-- CREATE CUSTOMER MODAL -->
+    <div class="modal" id="createModal">
+
+        <div class="modal-box">
+
+            <button class="close" onclick="closeModal('createModal')">
+                ×
+            </button>
+
+            <h2>Create Customer</h2>
+
+            <p class="modal-subtitle">
+                Enter customer and account details
+            </p>
+
+            <form id="createForm">
+
+                <label>Customer Name</label>
+                <input
+                    type="text"
+                    id="customerName"
+                    placeholder="Enter customer name"
+                    required
+                >
+
+                <label>Customer ID</label>
+                <input
+                    type="text"
+                    id="customerId"
+                    placeholder="Example: 101"
+                    required
+                >
+
+                <label>Account Number</label>
+                <input
+                    type="text"
+                    id="accountNumber"
+                    placeholder="Example: 5001"
+                    required
+                >
+
+                <label>Initial Deposit</label>
+                <input
+                    type="number"
+                    id="initialDeposit"
+                    placeholder="Enter amount"
+                    min="0"
+                    required
+                >
+
+                <button class="submit-btn" type="submit">
+                    Create Customer
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- DEPOSIT MODAL -->
+    <div class="modal" id="depositModal">
+
+        <div class="modal-box">
+
+            <button class="close" onclick="closeModal('depositModal')">
+                ×
+            </button>
+
+            <h2>Deposit Money</h2>
+
+            <p class="modal-subtitle">
+                Add money to customer account
+            </p>
+
+            <form id="depositForm">
+
+                <label>Customer ID</label>
+                <input
+                    type="text"
+                    id="depositId"
+                    placeholder="Enter customer ID"
+                    required
+                >
+
+                <label>Amount</label>
+                <input
+                    type="number"
+                    id="depositAmount"
+                    placeholder="Enter amount"
+                    min="1"
+                    required
+                >
+
+                <button class="submit-btn" type="submit">
+                    Deposit Money
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- WITHDRAW MODAL -->
+    <div class="modal" id="withdrawModal">
+
+        <div class="modal-box">
+
+            <button class="close" onclick="closeModal('withdrawModal')">
+                ×
+            </button>
+
+            <h2>Withdraw Money</h2>
+
+            <p class="modal-subtitle">
+                Withdraw money from customer account
+            </p>
+
+            <form id="withdrawForm">
+
+                <label>Customer ID</label>
+                <input
+                    type="text"
+                    id="withdrawId"
+                    placeholder="Enter customer ID"
+                    required
+                >
+
+                <label>Amount</label>
+                <input
+                    type="number"
+                    id="withdrawAmount"
+                    placeholder="Enter amount"
+                    min="1"
+                    required
+                >
+
+                <button class="submit-btn" type="submit">
+                    Withdraw Money
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- TRANSFER MODAL -->
+    <div class="modal" id="transferModal">
+
+        <div class="modal-box">
+
+            <button class="close" onclick="closeModal('transferModal')">
+                ×
+            </button>
+
+            <h2>Transfer Money</h2>
+
+            <p class="modal-subtitle">
+                Transfer money between customers
+            </p>
+
+            <form id="transferForm">
+
+                <label>Sender Customer ID</label>
+                <input
+                    type="text"
+                    id="senderId"
+                    placeholder="Enter sender ID"
+                    required
+                >
+
+                <label>Receiver Customer ID</label>
+                <input
+                    type="text"
+                    id="receiverId"
+                    placeholder="Enter receiver ID"
+                    required
+                >
+
+                <label>Amount</label>
+                <input
+                    type="number"
+                    id="transferAmount"
+                    placeholder="Enter amount"
+                    min="1"
+                    required
+                >
+
+                <button class="submit-btn" type="submit">
+                    Transfer Money
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- CUSTOMER DETAILS MODAL -->
+    <div class="modal" id="detailsModal">
+
+        <div class="modal-box">
+
+            <button class="close" onclick="closeModal('detailsModal')">
+                ×
+            </button>
+
+            <div id="detailsContent"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MESSAGE -->
+    <div id="message"></div>
+
+
+    <script>
+
+        // ==========================================
+        // DATA
+        // ==========================================
+
+        let customers =
+            JSON.parse(localStorage.getItem("bankCustomers")) || [];
+
+
+        // ==========================================
+        // SAVE DATA
+        // ==========================================
+
+        function saveData() {
+
+            localStorage.setItem(
+                "bankCustomers",
+                JSON.stringify(customers)
+            );
+
+        }
+
+
+        // ==========================================
+        // MODAL
+        // ==========================================
+
+        function openModal(id) {
+
+            document.getElementById(id).classList.add("active");
+
+        }
+
+
+        function closeModal(id) {
+
+            document.getElementById(id).classList.remove("active");
+
+        }
+
+
+        // Close modal by clicking outside
+        document.querySelectorAll(".modal").forEach(function(modal) {
+
+            modal.addEventListener("click", function(event) {
+
+                if (event.target === modal) {
+                    modal.classList.remove("active");
+                }
+
+            });
+
+        });
+
+
+        // ==========================================
+        // MESSAGE
+        // ==========================================
+
+        function showMessage(text) {
+
+            const message = document.getElementById("message");
+
+            message.textContent = text;
+            message.classList.add("show");
+
+            setTimeout(function() {
+
+                message.classList.remove("show");
+
+            }, 2500);
+
+        }
+
+
+        // ==========================================
+        // MONEY FORMAT
+        // ==========================================
+
+        function money(amount) {
+
+            return "₹" + Number(amount).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+        }
+
+
+        // ==========================================
+        // FIND CUSTOMER
+        // ==========================================
+
+        function findCustomer(id) {
+
+            return customers.find(function(customer) {
+
+                return customer.id === id;
+
+            });
+
+        }
+
+
+        // ==========================================
+        // CREATE CUSTOMER
+        // ==========================================
+
+        document
+        .getElementById("createForm")
+        .addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            const name =
+                document.getElementById("customerName").value.trim();
+
+            const id =
+                document.getElementById("customerId").value.trim();
+
+            const accountNumber =
+                document.getElementById("accountNumber").value.trim();
+
+            const initialDeposit =
+                Number(document.getElementById("initialDeposit").value);
+
+
+            if (initialDeposit < 0) {
+
+                showMessage("Invalid deposit amount!");
+                return;
+
+            }
+
+
+            if (findCustomer(id)) {
+
+                showMessage("Customer ID already exists!");
+                return;
+
+            }
+
+
+            const accountExists = customers.some(function(customer) {
+
+                return customer.accountNumber === accountNumber;
+
+            });
+
+
+            if (accountExists) {
+
+                showMessage("Account number already exists!");
+                return;
+
+            }
+
+
+            const newCustomer = {
+
+                name: name,
+
+                id: id,
+
+                accountNumber: accountNumber,
+
+                balance: initialDeposit,
+
+                transactions: []
+
+            };
+
+
+            if (initialDeposit > 0) {
+
+                newCustomer.transactions.push({
+
+                    type: "Deposit",
+
+                    amount: initialDeposit,
+
+                    date: new Date().toLocaleString()
+
+                });
+
+            }
+
+
+            customers.push(newCustomer);
+
+            saveData();
+
+            updateDashboard();
+
+            displayCustomers();
+
+
+            document.getElementById("createForm").reset();
+
+            closeModal("createModal");
+
+            showMessage("Customer created successfully!");
+
+        });
+
+
+        // ==========================================
+        // DEPOSIT
+        // ==========================================
+
+        document
+        .getElementById("depositForm")
+        .addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            const id =
+                document.getElementById("depositId").value.trim();
+
+            const amount =
+                Number(document.getElementById("depositAmount").value);
+
+
+            const customer = findCustomer(id);
+
+
+            if (!customer) {
+
+                showMessage("Customer not found!");
+                return;
+
+            }
+
+
+            if (amount <= 0) {
+
+                showMessage("Enter a valid amount!");
+                return;
+
+            }
+
+
+            customer.balance += amount;
+
+
+            customer.transactions.push({
+
+                type: "Deposit",
+
+                amount: amount,
+
+                date: new Date().toLocaleString()
+
+            });
+
+
+            saveData();
+
+            updateDashboard();
+
+            displayCustomers();
+
+
+            document.getElementById("depositForm").reset();
+
+            closeModal("depositModal");
+
+            showMessage("₹" + amount + " deposited successfully!");
+
+        });
+
+
+        // ==========================================
+        // WITHDRAW
+        // ==========================================
+
+        document
+        .getElementById("withdrawForm")
+        .addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            const id =
+                document.getElementById("withdrawId").value.trim();
+
+            const amount =
+                Number(document.getElementById("withdrawAmount").value);
+
+
+            const customer = findCustomer(id);
+
+
+            if (!customer) {
+
+                showMessage("Customer not found!");
+                return;
+
+            }
+
+
+            if (amount <= 0) {
+
+                showMessage("Enter a valid amount!");
+                return;
+
+            }
+
+
+            if (amount > customer.balance) {
+
+                showMessage("Insufficient balance!");
+                return;
+
+            }
+
+
+            customer.balance -= amount;
+
+
+            customer.transactions.push({
+
+                type: "Withdraw",
+
+                amount: amount,
+
+                date: new Date().toLocaleString()
+
+            });
+
+
+            saveData();
+
+            updateDashboard();
+
+            displayCustomers();
+
+
+            document.getElementById("withdrawForm").reset();
+
+            closeModal("withdrawModal");
+
+            showMessage("₹" + amount + " withdrawn successfully!");
+
+        });
+
+
+        // ==========================================
+        // TRANSFER
+        // ==========================================
+
+        document
+        .getElementById("transferForm")
+        .addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+
+            const senderId =
+                document.getElementById("senderId").value.trim();
+
+            const receiverId =
+                document.getElementById("receiverId").value.trim();
+
+            const amount =
+                Number(document.getElementById("transferAmount").value);
+
+
+            const sender = findCustomer(senderId);
+
+            const receiver = findCustomer(receiverId);
+
+
+            if (!sender || !receiver) {
+
+                showMessage("Invalid sender or receiver ID!");
+                return;
+
+            }
+
+
+            if (senderId === receiverId) {
+
+                showMessage("Sender and receiver cannot be same!");
+                return;
+
+            }
+
+
+            if (amount <= 0) {
+
+                showMessage("Enter a valid amount!");
+                return;
+
+            }
+
+
+            if (amount > sender.balance) {
+
+                showMessage("Insufficient balance!");
+                return;
+
+            }
+
+
+            // Remove money from sender
+            sender.balance -= amount;
+
+
+            // Add money to receiver
+            receiver.balance += amount;
+
+
+            // Sender history
+            sender.transactions.push({
+
+                type: "Transfer Sent",
+
+                amount: amount,
+
+                date: new Date().toLocaleString(),
+
+                person: receiver.name
+
+            });
+
+
+            // Receiver history
+            receiver.transactions.push({
+
+                type: "Transfer Received",
+
+                amount: amount,
+
+                date: new Date().toLocaleString(),
+
+                person: sender.name
+
+            });
+
+
+            saveData();
+
+            updateDashboard();
+
+            displayCustomers();
+
+
+            document.getElementById("transferForm").reset();
+
+            closeModal("transferModal");
+
+            showMessage("Transfer successful!");
+
+        });
+
+
+        // ==========================================
+        // DISPLAY CUSTOMERS
+        // ==========================================
+
+        function displayCustomers() {
+
+            const list =
+                document.getElementById("customerList");
+
+            const search =
+                document.getElementById("search")
+                .value
+                .toLowerCase()
+                .trim();
+
+
+            const filtered =
+                customers.filter(function(customer) {
+
+                    return (
+                        customer.name.toLowerCase().includes(search) ||
+                        customer.id.toLowerCase().includes(search) ||
+                        customer.accountNumber.toLowerCase().includes(search)
+                    );
+
+                });
+
+
+            if (filtered.length === 0) {
+
+                list.innerHTML = `
+                    <div class="empty">
+                        <h3>No Customers Yet</h3>
+                        <p>Click "Create Customer" to add your first customer.</p>
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            list.innerHTML = filtered.map(function(customer) {
+
+                const firstLetter =
+                    customer.name.charAt(0).toUpperCase();
+
+
+                return `
+
+                    <div class="customer">
+
+                        <div class="customer-left">
+
+                            <div class="avatar">
+                                ${firstLetter}
+                            </div>
+
+                            <div class="customer-info">
+
+                                <h3>
+                                    ${customer.name}
+                                </h3>
+
+                                <p>
+                                    Customer ID: ${customer.id}
+                                    |
+                                    Account: ${customer.accountNumber}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="customer-right">
+
+                            <strong>
+                                ${money(customer.balance)}
+                            </strong>
+
+                            <button
+                                class="view-btn"
+                                onclick="showDetails('${customer.id}')"
+                            >
+                                View Details
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+        }
+
+
+        // ==========================================
+        // SHOW CUSTOMER DETAILS
+        // ==========================================
+
+        function showDetails(id) {
+
+            const customer = findCustomer(id);
+
+            if (!customer) {
+                return;
+            }
+
+
+            let transactionsHTML = "";
+
+
+            if (customer.transactions.length === 0) {
+
+                transactionsHTML = `
+                    <p class="empty">
+                        No transactions yet.
+                    </p>
+                `;
+
+            } else {
+
+                transactionsHTML =
+                    customer.transactions
+                    .slice()
+                    .reverse()
+                    .map(function(transaction) {
+
+
+                        let className = "deposit";
+
+
+                        if (
+                            transaction.type.includes("Withdraw")
+                        ) {
+
+                            className = "withdraw";
+
+                        }
+
+
+                        if (
+                            transaction.type.includes("Transfer")
+                        ) {
+
+                            className = "transfer";
+
+                        }
+
+
+                        return `
+
+                            <div class="transaction">
+
+                                <div>
+
+                                    <strong class="${className}">
+                                        ${transaction.type}
+                                    </strong>
+
+                                    <br>
+
+                                    <small>
+                                        ${transaction.date}
+                                    </small>
+
+                                    ${
+                                        transaction.person
+                                        ?
+                                        `<br>
+                                         <small>
+                                            With: ${transaction.person}
+                                         </small>`
+                                        :
+                                        ""
+                                    }
+
+                                </div>
+
+                                <strong>
+                                    ${money(transaction.amount)}
+                                </strong>
+
+                            </div>
+
+                        `;
+
+                    })
+                    .join("");
+
+            }
+
+
+            document.getElementById("detailsContent").innerHTML = `
+
+                <h2>${customer.name}</h2>
+
+                <div class="detail-item">
+                    <span>Customer ID</span>
+                    <strong>${customer.id}</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Account Number</span>
+                    <strong>${customer.accountNumber}</strong>
+                </div>
+
+                <div class="detail-balance">
+                    ${money(customer.balance)}
+                </div>
+
+                <h3 class="history-title">
+                    Transaction History
+                </h3>
+
+                ${transactionsHTML}
+
+            `;
+
+
+            openModal("detailsModal");
+
+        }
+
+
+        // ==========================================
+        // UPDATE DASHBOARD
+        // ==========================================
+
+        function updateDashboard() {
+
+            document.getElementById("totalCustomers").textContent =
+                customers.length;
+
+
+            const totalBalance =
+                customers.reduce(function(total, customer) {
+
+                    return total + Number(customer.balance);
+
+                }, 0);
+
+
+            document.getElementById("totalBalance").textContent =
+                money(totalBalance);
+
+
+            const totalTransactions =
+                customers.reduce(function(total, customer) {
+
+                    return total + customer.transactions.length;
+
+                }, 0);
+
+
+            document.getElementById("totalTransactions").textContent =
+                totalTransactions;
+
+        }
+
+
+        // ==========================================
+        // START APPLICATION
+        // ==========================================
+
+        updateDashboard();
+
+        displayCustomers();
+
+    </script>
+
+</body>
+</html>
+```
